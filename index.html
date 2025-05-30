@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generador de Citas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; max-width: 800px; background-color: #f4f4f4; color: #333; }
+        h1 { color: #0056b3; }
+        label { font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; }
+        input, select, button { width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; }
+        button { background-color: #007bff; color: white; border: none; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        .campo { display: none; margin-bottom:10px; padding:10px; background-color: #fff; border-left: 3px solid #007bff;}
+        .resultado { background: #e9ecef; padding: 20px; border-radius: 6px; margin-top: 25px; border: 1px solid #ced4da; }
+        .resultado p { margin-bottom:8px; word-break: break-word; }
+        .resultado strong { color: #0056b3; }
+        .copiar-btn { width: auto; padding: 8px 15px; margin-top: 10px; margin-right: 10px; background-color: #28a745; font-size: 14px; }
+        .copiar-btn:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+
+    <h1>Generador de Citas y Referencias</h1>
+
+    <label for="tipo">Tipo de documento:</label>
+    <select id="tipo">
+        <option value="">Selecciona tipo</option>
+        <option value="libro">Libro</option>
+        <option value="articulo">Artículo de revista</option>
+        <option value="pagina">Página o sitio web</option>
+        <option value="documento">Documento del sitio web</option>
+        <option value="recurso">Recurso electrónico (Otro)</option>
+    </select>
+
+    <div id="campos">
+        <div class="campo autor">
+            <label>Autor(es):</label>
+            <input type="text" id="autor" placeholder="Ej: Maria Rodriguez Perez; Jose Martinez Lopez">
+        </div>
+        <div class="campo titulo"> <label>Título del libro / artículo / recurso:</label> <input type="text" id="titulo"> </div>
+        <div class="campo anio"> <label>Año:</label> <input type="text" id="anio" placeholder="Ej: 2023 o s.f."> </div>
+        <div class="campo ciudad"> <label>Ciudad (para libros):</label> <input type="text" id="ciudad"> </div>
+        <div class="campo publicado"> <label>Editorial / Publicado por:</label> <input type="text" id="publicado"> </div>
+        
+        <div class="campo revista"> <label>Nombre de la revista:</label> <input type="text" id="revista"> </div>
+        <div class="campo volumen"> <label>Volumen (para revista):</label> <input type="text" id="volumen"> </div>
+        <div class="campo numero"> <label>Número/Fascículo (para revista):</label> <input type="text" id="numero"> </div>
+        <div class="campo paginas"> <label>Páginas (para revista, Ej: 12-25):</label> <input type="text" id="paginas"> </div>
+
+        <div class="campo nombrePagina"> <label>Título de la página/documento específico:</label> <input type="text" id="nombrePagina"> </div>
+        <div class="campo sitioWeb"> <label>Nombre del sitio web general:</label> <input type="text" id="sitioWeb"> </div>
+        <div class="campo mes"> <label>Mes (nombre o número):</label> <input type="text" id="mes" placeholder="Ej: mayo o 5"> </div>
+        <div class="campo dia"> <label>Día:</label> <input type="text" id="dia" placeholder="Ej: 15"> </div>
+        <div class="campo url"> <label>URL:</label> <input type="text" id="url"> </div>
+        
+        <div class="campo estado"> <label>Ciudad/Estado (para recurso electrónico):</label> <input type="text" id="estado"> </div>
+        <div class="campo pais"> <label>Provincia/País (para recurso electrónico):</label> <input type="text" id="pais"> </div>
+        <div class="campo region"> <label>Región (para recurso electrónico):</label> <input type="text" id="region"> </div>
+    </div>
+
+    <label for="norma">Norma de citación:</label>
+    <select id="norma">
+        <option value="apa">APA 7ª edición</option>
+        <option value="mla">MLA 9ª edición</option>
+        <option value="iso">ISO 690</option>
+    </select>
+
+    <button id="generarBtn">Generar cita y referencia</button>
+
+    <div class="resultado">
+        <p><strong>Cita en el texto:</strong></p>
+        <p id="cita"></p>
+        <button class="copiar-btn" data-target="cita">Copiar cita</button>
+
+        <p><strong>Referencia:</strong></p>
+        <p id="referencia"></p>
+        <button class="copiar-btn" data-target="referencia">Copiar referencia</button>
+    </div>
+
+    <script>
+        const tipoSelect = document.getElementById('tipo');
+        const generarBtn = document.getElementById('generarBtn');
+        const camposDiv = document.getElementById('campos');
+
+        const camposPorTipo = {
+            libro: ['autor', 'titulo', 'anio', 'ciudad', 'publicado'],
+            articulo: ['autor', 'titulo', 'revista', 'anio', 'volumen', 'numero', 'paginas'],
+            pagina: ['autor', 'nombrePagina', 'sitioWeb', 'anio', 'mes', 'dia', 'url'],
+            documento: ['autor', 'nombrePagina', 'sitioWeb', 'anio', 'mes', 'dia', 'url'],
+            recurso: ['autor', 'titulo', 'estado', 'pais', 'region', 'anio', 'mes', 'dia', 'url']
+        };
+
+        function mostrarCampos() {
+            const tipoSeleccionado = tipoSelect.value;
+            const todosLosCampos = camposDiv.querySelectorAll('.campo');
+            todosLosCampos.forEach(campo => campo.style.display = 'none');
+
+            const visibles = camposPorTipo[tipoSeleccionado] || [];
+            visibles.forEach(claseCampo => {
+                const elemento = camposDiv.querySelector(`.campo.${claseCampo}`);
+                if (elemento) elemento.style.display = 'block';
+            });
+        }
+
+        function capitalizar(str) {
+            if (!str) return "";
+            return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+        }
+        
+        // APA sentence case for titles (simple version)
+        function sentenceCaseAPA(str) {
+            if (!str) return "";
+            let tempStr = str.toLowerCase();
+            return tempStr.charAt(0).toUpperCase() + tempStr.slice(1);
+        }
+
+        // MLA title case for titles (simple version, does not account for small words like of, a, the, etc.)
+        function titleCaseMLA(str) {
+            if (!str) return "";
+            return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        }
+
+
+        function procesarAutores(str) {
+            if (!str.trim()) return ["Autor Desconocido"]; 
+
+            return str.split(";").map(nombreCompleto => {
+                nombreCompleto = nombreCompleto.trim();
+                if (!nombreCompleto) return "Autor Desconocido";
+
+                let partes = nombreCompleto.split(" ").filter(p => p.length > 0);
+                if (partes.length === 0) return "Autor Desconocido";
+                if (partes.length === 1) return capitalizar(partes[0]); 
+
+                let apellidos = "";
+                let inicialesNombres = [];
+
+                if (partes.length >= 2) {
+                    if (partes.length === 2) { 
+                        apellidos = capitalizar(partes[1]);
+                        inicialesNombres.push(partes[0].charAt(0).toUpperCase() + ".");
+                    } else { 
+                        const numNombres = partes.length > 2 ? partes.length - 2 : 1; 
+                        apellidos = partes.slice(numNombres).map(ap => capitalizar(ap)).join(" ");
+                        inicialesNombres = partes.slice(0, numNombres).map(p => p.charAt(0).toUpperCase() + ".").join(" ");
+                    }
+                    return `${apellidos}, ${inicialesNombres}`;
+                }
+                return nombreCompleto; 
+            });
+        }
+        
+        function formatearListaAutoresAPA(autoresProcesados) {
+            if (autoresProcesados.length === 0 || autoresProcesados[0] === "Autor Desconocido") return "Autor Desconocido";
+            if (autoresProcesados.length === 1) return autoresProcesados[0];
+            
+            if (autoresProcesados.length <= 20) {
+                const todosMenosUltimo = autoresProcesados.slice(0, -1).join(", ");
+                return `${todosMenosUltimo} & ${autoresProcesados.slice(-1)}`;
+            } else {
+                const primeros19 = autoresProcesados.slice(0, 19).join(", ");
+                return `${primeros19}, ..., ${autoresProcesados.slice(-1)}`;
+            }
+        }
+
+        function formatearListaAutoresGeneral(autoresProcesados, norma = "apa") { // MLA, ISO
+            if (autoresProcesados.length === 0 || autoresProcesados[0] === "Autor Desconocido") return "Autor Desconocido";
+            if (autoresProcesados.length === 1) return autoresProcesados[0];
+
+            if (norma === "mla") {
+                 // MLA: John Smith and Jane Doe. / John Smith, Jane Doe, and Robert Jones. / John Smith et al. (for 3+)
+                if (autoresProcesados.length === 2) {
+                    return `${autoresProcesados[0]} and ${autoresProcesados[1]}`;
+                } else if (autoresProcesados.length >=3) { // MLA typically uses et al. for 3+ in the works cited list for brevity
+                    return `${autoresProcesados[0]} et al.`;
+                }
+            }
+             // Default or ISO (often uses semicolons)
+            return autoresProcesados.join(norma === "iso" ? "; " : ", ");
+        }
+
+
+        function formatearNombresMes(mesStr) {
+            if (!mesStr) return "";
+            const mesNum = parseInt(mesStr, 10);
+            if (!isNaN(mesNum) && mesNum >= 1 && mesNum <= 12) {
+                const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+                return meses[mesNum - 1];
+            }
+            // For MLA, some months are abbreviated. This is a simplification.
+            // Example: "Sept." for "September"
+            let mesLimpio = mesStr.trim().toLowerCase();
+            if (mesLimpio.length > 4 && (tipoSelect.value === 'pagina' || tipoSelect.value === 'documento') && document.getElementById("norma").value === 'mla') {
+                 // MLA abbreviations for months longer than 4 letters (except May, June, July)
+                const mlaMeses = {
+                    "enero": "Jan.", "febrero": "Feb.", "marzo": "Mar.", "abril": "Apr.", 
+                    "agosto": "Aug.", "septiembre": "Sept.", "octubre": "Oct.", 
+                    "noviembre": "Nov.", "diciembre": "Dec."
+                };
+                if (mlaMeses[mesLimpio]) return mlaMeses[mesLimpio];
+            }
+
+            return capitalizar(mesLimpio);
+        }
+
+
+        function generar() {
+            const tipo = tipoSelect.value;
+            const norma = document.getElementById("norma").value;
+            
+            const autoresInput = document.getElementById("autor").value;
+            const autoresProcesados = procesarAutores(autoresInput);
+            
+            let autorParaCita = "Desconocido";
+            if (autoresProcesados.length > 0 && autoresProcesados[0] !== "Autor Desconocido") {
+                const primerAutorPartes = autoresProcesados[0].split(',')[0]; 
+                if (autoresProcesados.length === 1) {
+                    autorParaCita = primerAutorPartes;
+                } else if (autoresProcesados.length === 2) {
+                    const segundoAutorPartes = autoresProcesados[1].split(',')[0];
+                    if (norma === "apa") autorParaCita = `${primerAutorPartes} & ${segundoAutorPartes}`;
+                    else if (norma === "mla") autorParaCita = `${primerAutorPartes} and ${segundoAutorPartes}`;
+                    else if (norma === "iso") autorParaCita = `${primerAutorPartes}; ${segundoAutorPartes}`;
+                    else autorParaCita = `${primerAutorPartes} & ${segundoAutorPartes}`; // Default
+                } else { // 3 o más autores
+                    autorParaCita = `${primerAutorPartes} et al.`;
+                }
+            }
+            if (autoresProcesados[0] === "Autor Desconocido" && norma === "apa") {
+                // For APA, if author is unknown, use title for in-text citation
+                let tituloCita = document.getElementById("titulo")?.value.trim() || document.getElementById("nombrePagina")?.value.trim() || "Título Desconocido";
+                // APA uses first few words if title is long
+                tituloCita = tituloCita.split(' ').slice(0,3).join(' ');
+                if (document.getElementById("titulo")?.value.trim()) { // Books, articles
+                     autorParaCita = `*${tituloCita}*`; // Italicize book/article title
+                } else { // Webpages
+                     autorParaCita = `"${tituloCita}"`; // Quotation marks for webpage title
+                }
+            }
+
+
+            let titulo = document.getElementById("titulo")?.value.trim() || "";
+            const anio = document.getElementById("anio")?.value.trim() || "s.f.";
+            const ciudad = document.getElementById("ciudad")?.value.trim() || "";
+            const publicado = document.getElementById("publicado")?.value.trim() || "";
+            
+            const revista = document.getElementById("revista")?.value.trim() || "";
+            const volumen = document.getElementById("volumen")?.value.trim() || "";
+            const numero = document.getElementById("numero")?.value.trim() || "";
+            const paginas = document.getElementById("paginas")?.value.trim() || "";
+
+            let nombrePagina = document.getElementById("nombrePagina")?.value.trim() || "";
+            const sitioWeb = document.getElementById("sitioWeb")?.value.trim() || "";
+            const url = document.getElementById("url")?.value.trim() || "";
+            const mesInput = document.getElementById("mes")?.value.trim() || "";
+            const dia = document.getElementById("dia")?.value.trim() || "";
+            
+            const estado = document.getElementById("estado")?.value.trim() || "";
+            const pais = document.getElementById("pais")?.value.trim() || "";
+            const region = document.getElementById("region")?.value.trim() || "";
+            
+            const mesFormateado = formatearNombresMes(mesInput);
+
+            let cita = "", ref = "";
+            
+            const autoresFormatoAPA = formatearListaAutoresAPA(autoresProcesados);
+            // For MLA, the formatting in the works cited list can differ more significantly for 3+ authors
+            const autoresFormatoMLA = formatearListaAutoresGeneral(autoresProcesados, "mla"); 
+            const autoresFormatoISO = formatearListaAutoresGeneral(autoresProcesados, "iso");
+
+
+            switch (norma) {
+                case "apa":
+                    cita = `(${autorParaCita}, ${anio})`;
+                    if (autoresProcesados[0] === "Autor Desconocido" && (tipo === "pagina" || tipo === "documento" || tipo === "recurso")) {
+                         // For web pages without authors, APA uses ("Title", year)
+                         let tituloCitaAPA = nombrePagina || titulo || "Título Desconocido";
+                         if (tituloCitaAPA.length > 30) tituloCitaAPA = tituloCitaAPA.substring(0,30) + "..."; // Shorten if very long
+                         cita = `("${tituloCitaAPA}", ${anio})`;
+                    } else if (autoresProcesados[0] === "Autor Desconocido" && (tipo === "libro" || tipo === "articulo")) {
+                         let tituloCitaAPA = titulo || "Título Desconocido";
+                         if (tituloCitaAPA.length > 30) tituloCitaAPA = tituloCitaAPA.substring(0,30) + "...";
+                         cita = `(*${tituloCitaAPA}*, ${anio})`;
+                    }
+
+
+                    let tituloAPA = tipo === "libro" || tipo === "articulo" || tipo === "recurso" ? sentenceCaseAPA(titulo) : sentenceCaseAPA(nombrePagina);
+                    let fuenteAPA = tipo === "libro" ? publicado : (tipo === "articulo" ? `*${titleCaseMLA(revista)}*` : sitioWeb); // Revista en Title Case Italics
+
+                    if (tipo === "libro") {
+                        ref = `${autoresFormatoAPA}. (${anio}). *${tituloAPA}*. ${ciudad ? ciudad + ': ' : ''}${publicado}.`;
+                    } else if (tipo === "articulo") {
+                        let detallesArticulo = "";
+                        if (volumen) detallesArticulo += `, *${volumen}*`; // Volumen en cursiva
+                        if (numero) detallesArticulo += `(${numero})`; // Número en paréntesis, no cursiva
+                        if (paginas) detallesArticulo += `, ${paginas}`;
+                        ref = `${autoresFormatoAPA}. (${anio}). ${tituloAPA}. ${fuenteAPA}${detallesArticulo}.`;
+                        if(url) ref += ` ${url}`; // DOI or URL for articles
+                    } else if (tipo === "pagina" || tipo === "documento") {
+                        let fechaAPAWeb = anio;
+                        if (anio !== "s.f." && mesFormateado && dia) fechaAPAWeb = `${anio}, ${dia} de ${mesFormateado}`;
+                        else if (anio !== "s.f." && mesFormateado) fechaAPAWeb = `${anio}, ${mesFormateado}`;
+                        
+                        ref = `${autoresFormatoAPA}. (${fechaAPAWeb}). *${tituloAPA}*. ${fuenteAPA}. ${url ? url : ''}`;
+                    } else if (tipo === "recurso") {
+                        let fechaAPAWeb = anio;
+                        if (anio !== "s.f." && mesFormateado && dia) fechaAPAWeb = `${anio}, ${dia} de ${mesFormateado}`;
+                        else if (anio !== "s.f." && mesFormateado) fechaAPAWeb = `${anio}, ${mesFormateado}`;
+                        
+                        let ubicacion = [estado, pais, region].filter(Boolean).join(", ");
+                        ref = `${autoresFormatoAPA}. (${fechaAPAWeb}). *${tituloAPA}*. [Recurso electrónico]. ${ubicacion ? ubicacion + ". " : ""}${url ? url : ''}`;
+                    }
+                    break;
+
+                case "mla":
+                    // MLA cita en texto (Apellido Página) - Página no está en el form, así que solo Apellido o (Apellido y Apellido) o (Apellido et al.)
+                    // El autorParaCita ya está ajustado para MLA con 'and' y 'et al.' para 3+
+                    cita = `(${autorParaCita})`; // MLA doesn't always include year in parenthetical for known authors, page number is key.
+                                              // If year is important for disambiguation or content, it can be added.
+                                              // For anonymous, it's ("Shortened Title" Page).
+                    if (autoresProcesados[0] === "Autor Desconocido") {
+                         let tituloCitaMLA = nombrePagina || titulo || "Título Desconocido";
+                         tituloCitaMLA = tituloCitaMLA.split(' ').slice(0,3).join(' '); // Shortened title
+                         cita = `("${titleCaseMLA(tituloCitaMLA)}")`;
+                    }
+
+
+                    let tituloMLA = (tipo === "libro" || tipo === "recurso") ? `*${titleCaseMLA(titulo)}*` : `"${titleCaseMLA(titulo)}"`; // Artículo y Pagina/Documento entre comillas
+                    if (tipo === "pagina" || tipo === "documento") tituloMLA = `"${titleCaseMLA(nombrePagina)}"`;
+                    
+                    let fuenteMLA = tipo === "libro" ? publicado : (tipo === "articulo" ? `*${titleCaseMLA(revista)}*` : `*${titleCaseMLA(sitioWeb)}*`); // Revista y Sitio Web en Title Case Italics
+
+                    let fechaMLA = anio !== "s.f." ? anio : (dia && mesFormateado ? `${dia} ${mesFormateado}` : (mesFormateado || "s.f."));
+                    if (dia && mesFormateado && anio !== "s.f.") fechaMLA = `${dia} ${formatearNombresMes(mesInput)} ${anio}`; // formatearNombresMes for MLA can give abbreviated month
+                    else if (mesFormateado && anio !== "s.f.") fechaMLA = `${formatearNombresMes(mesInput)} ${anio}`;
+                    
+                    if (tipo === "libro") {
+                        ref = `${autoresFormatoMLA}. ${tituloMLA}. ${publicado}, ${fechaMLA}.`;
+                    } else if (tipo === "articulo") {
+                        let detallesArticulo = "";
+                        if (volumen) detallesArticulo += `, vol. ${volumen}`;
+                        if (numero) detallesArticulo += `, no. ${numero}`;
+                        if (paginas) detallesArticulo += `, pp. ${paginas}`;
+                        ref = `${autoresFormatoMLA}. ${tituloMLA} ${fuenteMLA}${detallesArticulo}, ${fechaMLA}. ${url ? url : ''}`;
+                    } else if (tipo === "pagina" || tipo === "documento") {
+                        ref = `${autoresFormatoMLA}. ${tituloMLA} ${fuenteMLA}, ${fechaMLA}, ${url}.`;
+                         // MLA 9th: Access date is optional, but can be useful
+                        const hoy = new Date();
+                        const fechaAccesoMLA = `${hoy.getDate()} ${formatearNombresMes(String(hoy.getMonth() + 1))} ${hoy.getFullYear()}`;
+                        ref += ` Accessed ${fechaAccesoMLA}.`;
+                    } else if (tipo === "recurso") {
+                         let editor = publicado || "Editor Desconocido";
+                         let ubicacion = [estado, pais, region].filter(Boolean).join(", ");
+                         ref = `${autoresFormatoMLA}. ${tituloMLA}. ${editor}, ${fechaMLA}. ${ubicacion ? ubicacion + ". " : ""}${url ? url : ''}`;
+                    }
+                    break;
+
+                case "iso":
+                    // ISO (Author, Year) or [1] style for citation. Using (Author, Year) for consistency for now.
+                    let autorCitaISO = "Desconocido";
+                    if (autoresProcesados.length > 0 && autoresProcesados[0] !== "Autor Desconocido") {
+                        autorCitaISO = autoresProcesados.map(a => a.split(',')[0]).slice(0,1).join(""); // Only first author's last name
+                        if(autoresProcesados.length > 1) autorCitaISO += " et al.";
+                    } else {
+                        autorCitaISO = (titulo || nombrePagina || "Anónimo").substring(0,15);
+                    }
+                    cita = `(${autorCitaISO}, ${anio})`;
+
+
+                    let tituloISO = `*${titulo || nombrePagina}*`;
+                    let fuenteISO = tipo === "libro" ? (ciudad ? ciudad + ': ' + publicado : publicado) : 
+                                    (tipo === "articulo" ? `*${revista}*` : sitioWeb);
+                    
+                    let fechaISO = anio;
+                    if (dia && mesFormateado && anio !== "s.f.") fechaISO = `${anio}-${String(new Date(Date.parse(mesFormateado +" 1, 2000")).getMonth()+1).padStart(2,'0')}-${dia.padStart(2,'0')}`; // YYYY-MM-DD
+                    else if (mesFormateado && anio !== "s.f.") fechaISO = `${anio}-${String(new Date(Date.parse(mesFormateado +" 1, 2000")).getMonth()+1).padStart(2,'0')}`; // YYYY-MM
+                    
+                    const hoy = new Date();
+                    const fechaConsulta = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2,'0')}-${String(hoy.getDate()).padStart(2,'0')}`;
+
+                    if (tipo === "libro") {
+                        ref = `${autoresFormatoISO}. ${anio}. ${tituloISO}. ${fuenteISO}.`;
+                    } else if (tipo === "articulo") {
+                        let detallesArticulo = "";
+                        if (volumen) detallesArticulo += `, ${volumen}`;
+                        if (numero) detallesArticulo += `(${numero})`;
+                        if (paginas) detallesArticulo += `: ${paginas}`;
+                        ref = `${autoresFormatoISO}. ${anio}. ${titulo || nombrePagina}. ${fuenteISO}${detallesArticulo}.`;
+                    } else if (tipo === "pagina" || tipo === "documento") {
+                        ref = `${autoresFormatoISO}. (${fechaISO}). ${tituloISO} [en línea]. ${fuenteISO}. [Consultado ${fechaConsulta}]. Disponible en: ${url}`;
+                    } else if (tipo === "recurso") {
+                         let tipoRecurso = "[recurso electrónico]"; // Can be more specific if a field is added
+                         let editor = publicado || [estado, pais, region].filter(Boolean).join(", ");
+                         ref = `${autoresFormatoISO}. ${anio}. ${tituloISO} ${tipoRecurso}. ${editor}. ${url ? 'Disponible en: ' + url : ''}`;
+                    }
+                    break;
+            }
+
+            document.getElementById("cita").textContent = cita.trim();
+            document.getElementById("referencia").innerHTML = ref.trim(); // Usar innerHTML para cursivas
+        }
+
+        function copiar(event) {
+            const targetId = event.target.dataset.target;
+            if (!targetId) return;
+
+            const textoElemento = document.getElementById(targetId);
+            if (!textoElemento) return;
+
+            const texto = textoElemento.textContent;
+            const originalButtonText = event.target.textContent;
+            navigator.clipboard.writeText(texto).then(() => {
+                event.target.textContent = '¡Copiado!';
+                setTimeout(() => {
+                    event.target.textContent = originalButtonText;
+                }, 1500); // Cambia de nuevo a "Copiar..." después de 1.5 segundos
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+                alert('Error al copiar el texto.');
+            });
+        }
+
+        // Event Listeners
+        tipoSelect.addEventListener('change', mostrarCampos);
+        generarBtn.addEventListener('click', generar);
+        document.querySelectorAll('.copiar-btn').forEach(btn => {
+            btn.addEventListener('click', copiar);
+        });
+
+        // Inicializar campos al cargar
+        mostrarCampos();
+    </script>
+
+</body>
+</html>
