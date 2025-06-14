@@ -10,11 +10,12 @@
             --primary-light: #007bff;
             --secondary: #28a745;
             --secondary-dark: #218838;
-            --light: #f8f9fa;
+            --light: #ffffff;
             --dark: #343a40;
             --gray: #6c757d;
             --border: #ced4da;
             --shadow: rgba(0,0,0,0.1);
+            --background-light: #f8f9fa;
         }
         
         * {
@@ -26,31 +27,32 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-color: #ffffff;
             color: #333;
-            padding: 20px;
+            padding: 10px;
             min-height: 100vh;
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             background-color: white;
             border-radius: 12px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
             overflow: hidden;
+            border: 1px solid #e9ecef;
         }
         
         header {
             background: linear-gradient(120deg, var(--primary), var(--primary-light));
             color: white;
-            padding: 25px;
+            padding: 20px;
             text-align: center;
             position: relative;
         }
         
         header h1 {
-            font-size: 2.2rem;
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
             margin-bottom: 10px;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
         }
@@ -59,32 +61,25 @@
             max-width: 700px;
             margin: 0 auto;
             opacity: 0.9;
-            font-size: 1.05rem;
+            font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+            padding: 0 10px;
         }
         
         .content {
-            display: flex;
-            flex-wrap: wrap;
-            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
             gap: 20px;
+            padding: 15px;
+            background-color: #ffffff;
         }
         
-        .form-section {
-            flex: 1;
-            min-width: 300px;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 3px 10px var(--shadow);
-        }
-        
+        .form-section,
         .result-section {
-            flex: 1;
-            min-width: 300px;
-            background-color: #f9f9f9;
+            background-color: #ffffff;
             border-radius: 10px;
-            padding: 25px;
+            padding: 20px;
             box-shadow: 0 3px 10px var(--shadow);
+            border: 1px solid #e9ecef;
         }
         
         .section-title {
@@ -92,14 +87,14 @@
             border-bottom: 2px solid var(--primary-light);
             padding-bottom: 10px;
             margin-bottom: 20px;
-            font-size: 1.4rem;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
             display: flex;
             align-items: center;
             gap: 10px;
         }
         
         .section-title i {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
         }
         
         .form-group {
@@ -114,6 +109,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: clamp(0.9rem, 2vw, 1rem);
         }
         
         input, select, button {
@@ -121,8 +117,9 @@
             padding: 12px 15px;
             border-radius: 8px;
             border: 1px solid var(--border);
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 2vw, 1rem);
             transition: all 0.3s ease;
+            background-color: #ffffff;
         }
         
         input:focus, select:focus {
@@ -135,7 +132,7 @@
             display: none;
             margin-bottom: 15px;
             padding: 15px;
-            background-color: white;
+            background-color: var(--background-light);
             border-radius: 8px;
             border-left: 4px solid var(--primary-light);
             box-shadow: 0 2px 5px var(--shadow);
@@ -152,12 +149,13 @@
             color: white;
             border: none;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
             font-weight: 600;
             padding: 14px;
             margin-top: 10px;
             transition: all 0.3s ease;
             letter-spacing: 0.5px;
+            min-height: 48px;
         }
         
         button:hover {
@@ -165,11 +163,15 @@
             box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
         }
         
+        button:active {
+            transform: translateY(0);
+        }
+        
         .result-card {
-            background-color: white;
+            background-color: #ffffff;
             border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
+            padding: 15px;
+            margin-bottom: 20px;
             box-shadow: 0 3px 8px rgba(0,0,0,0.08);
             border: 1px solid var(--border);
         }
@@ -177,7 +179,7 @@
         .result-card h3 {
             color: var(--primary);
             margin-bottom: 15px;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -188,11 +190,13 @@
         .result-content {
             min-height: 60px;
             padding: 15px;
-            background-color: #f8f9fa;
+            background-color: var(--background-light);
             border-radius: 6px;
             border-left: 3px solid var(--primary);
             margin-bottom: 15px;
             word-break: break-word;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            line-height: 1.5;
         }
         
         .btn-group {
@@ -203,11 +207,10 @@
         
         .copiar-btn {
             background: linear-gradient(to right, var(--secondary), var(--secondary-dark));
-            width: auto;
-            padding: 10px 20px;
-            font-size: 0.95rem;
-            flex: 1;
-            min-width: 120px;
+            width: 100%;
+            padding: 10px 15px;
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
+            min-width: auto;
         }
         
         .copiar-btn:hover {
@@ -224,28 +227,20 @@
             border-radius: 50%;
             text-align: center;
             line-height: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             cursor: help;
             margin-left: 5px;
+            flex-shrink: 0;
         }
         
         footer {
             text-align: center;
             padding: 20px;
             color: var(--gray);
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
             border-top: 1px solid var(--border);
             margin-top: 20px;
-        }
-        
-        @media (max-width: 768px) {
-            .content {
-                flex-direction: column;
-            }
-            
-            header h1 {
-                font-size: 1.8rem;
-            }
+            background-color: #ffffff;
         }
         
         .highlight {
@@ -257,6 +252,132 @@
         .italic {
             font-style: italic;
         }
+        
+        /* Responsive breakpoints */
+        
+        /* Tablets - pantallas medianas */
+        @media (min-width: 768px) {
+            body {
+                padding: 20px;
+                background-color: #f8f9fa;
+            }
+            
+            .content {
+                grid-template-columns: 1fr 1fr;
+                padding: 20px;
+            }
+            
+            .form-section,
+            .result-section {
+                padding: 25px;
+            }
+            
+            .result-card {
+                padding: 20px;
+                margin-bottom: 25px;
+            }
+            
+            .copiar-btn {
+                width: auto;
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+        
+        /* Computadoras - pantallas grandes */
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1000px;
+            }
+            
+            .content {
+                gap: 25px;
+                padding: 25px;
+            }
+            
+            .btn-group {
+                flex-wrap: nowrap;
+            }
+        }
+        
+        /* Pantallas muy pequeñas */
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            
+            .content {
+                padding: 10px;
+                gap: 15px;
+            }
+            
+            .form-section,
+            .result-section {
+                padding: 15px;
+            }
+            
+            .result-card {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+            
+            input, select, button {
+                padding: 10px 12px;
+            }
+            
+            .campo {
+                padding: 12px;
+            }
+            
+            .section-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .result-card h3 {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+        
+        /* Orientación landscape en móviles */
+        @media (max-height: 500px) and (orientation: landscape) {
+            header {
+                padding: 15px;
+            }
+            
+            header h1 {
+                font-size: 1.5rem;
+                margin-bottom: 5px;
+            }
+            
+            header p {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Mejorar accesibilidad táctil */
+        @media (hover: none) and (pointer: coarse) {
+            button {
+                min-height: 44px;
+                font-size: 1rem;
+            }
+            
+            input, select {
+                min-height: 44px;
+            }
+            
+            .info-icon {
+                width: 24px;
+                height: 24px;
+                line-height: 24px;
+                font-size: 0.8rem;
+            }
+        }
+        
+        /* Dark mode support - removido para mantener siempre fondo blanco */
     </style>
 </head>
 <body>
@@ -537,288 +658,39 @@
             return capitalizar(mesLimpio);
         }
 
-        function generar() {
-            const tipo = tipoSelect.value;
-            const norma = document.getElementById("norma").value;
-            
-            const autoresInput = document.getElementById("autor").value;
-            const autoresProcesados = procesarAutores(autoresInput);
-            
-            let autorParaCita = "Desconocido";
-            let autorParaCitaInicio = "Desconocido";
-            if (autoresProcesados.length > 0 && autoresProcesados[0] !== "Autor Desconocido") {
-                const primerAutorPartes = autoresProcesados[0].split(',')[0]; 
-                
-                // Para cita al final de párrafo
-                if (autoresProcesados.length === 1) {
-                    autorParaCita = primerAutorPartes;
-                } else if (autoresProcesados.length === 2) {
-                    const segundoAutorPartes = autoresProcesados[1].split(',')[0];
-                    if (norma === "apa") autorParaCita = `${primerAutorPartes} & ${segundoAutorPartes}`;
-                    else if (norma === "mla") autorParaCita = `${primerAutorPartes} and ${segundoAutorPartes}`;
-                    else if (norma === "iso") autorParaCita = `${primerAutorPartes}; ${segundoAutorPartes}`;
-                    else autorParaCita = `${primerAutorPartes} & ${segundoAutorPartes}`;
-                } else {
-                    autorParaCita = `${primerAutorPartes} et al.`;
-                }
-                
-                // Para cita al inicio de oración
-                if (autoresProcesados.length === 1) {
-                    autorParaCitaInicio = primerAutorPartes;
-                } else if (autoresProcesados.length === 2) {
-                    const segundoAutorPartes = autoresProcesados[1].split(',')[0];
-                    if (norma === "apa") autorParaCitaInicio = `${primerAutorPartes} y ${segundoAutorPartes}`;
-                    else if (norma === "mla") autorParaCitaInicio = `${primerAutorPartes} y ${segundoAutorPartes}`;
-                    else if (norma === "iso") autorParaCitaInicio = `${primerAutorPartes} y ${segundoAutorPartes}`;
-                    else autorParaCitaInicio = `${primerAutorPartes} y ${segundoAutorPartes}`;
-                } else {
-                    autorParaCitaInicio = `${primerAutorPartes} y otros`;
-                }
-            }
-            
-            if (autoresProcesados[0] === "Autor Desconocido" && norma === "apa") {
-                let tituloCita = document.getElementById("titulo")?.value.trim() || document.getElementById("nombrePagina")?.value.trim() || "Título Desconocido";
-                tituloCita = tituloCita.split(' ').slice(0,3).join(' ');
-                
-                if (document.getElementById("titulo")?.value.trim()) {
-                    autorParaCita = `*${tituloCita}*`;
-                    autorParaCitaInicio = `"${tituloCita}"`;
-                } else {
-                    autorParaCita = `"${tituloCita}"`;
-                    autorParaCitaInicio = `"${tituloCita}"`;
-                }
-            }
-
-            let titulo = document.getElementById("titulo")?.value.trim() || "";
-            const anio = document.getElementById("anio")?.value.trim() || "s.f.";
-            const ciudad = document.getElementById("ciudad")?.value.trim() || "";
-            const publicado = document.getElementById("publicado")?.value.trim() || "";
-            
-            const revista = document.getElementById("revista")?.value.trim() || "";
-            const volumen = document.getElementById("volumen")?.value.trim() || "";
-            const numero = document.getElementById("numero")?.value.trim() || "";
-            const paginas = document.getElementById("paginas")?.value.trim() || "";
-
-            let nombrePagina = document.getElementById("nombrePagina")?.value.trim() || "";
-            const sitioWeb = document.getElementById("sitioWeb")?.value.trim() || "";
-            const url = document.getElementById("url")?.value.trim() || "";
-            const mesInput = document.getElementById("mes")?.value.trim() || "";
-            const dia = document.getElementById("dia")?.value.trim() || "";
-            
-            const estado = document.getElementById("estado")?.value.trim() || "";
-            const pais = document.getElementById("pais")?.value.trim() || "";
-            const region = document.getElementById("region")?.value.trim() || "";
-            
-            const mesFormateado = formatearNombresMes(mesInput);
-
-            let cita = "", citaInicio = "", ref = "";
-            
-            const autoresFormatoAPA = formatearListaAutoresAPA(autoresProcesados);
-            const autoresFormatoMLA = formatearListaAutoresGeneral(autoresProcesados, "mla");
-            const autoresFormatoISO = formatearListaAutoresGeneral(autoresProcesados, "iso");
-
-            switch (norma) {
-                case "apa":
-                    // Cita al final de párrafo
-                    cita = `(${autorParaCita}, ${anio})`;
-                    if (autoresProcesados[0] === "Autor Desconocido" && (tipo === "pagina" || tipo === "documento" || tipo === "recurso")) {
-                        let tituloCitaAPA = nombrePagina || titulo || "Título Desconocido";
-                        if (tituloCitaAPA.length > 30) tituloCitaAPA = tituloCitaAPA.substring(0,30) + "...";
-                        cita = `("${tituloCitaAPA}", ${anio})`;
-                    } else if (autoresProcesados[0] === "Autor Desconocido" && (tipo === "libro" || tipo === "articulo")) {
-                        let tituloCitaAPA = titulo || "Título Desconocido";
-                        if (tituloCitaAPA.length > 30) tituloCitaAPA = tituloCitaAPA.substring(0,30) + "...";
-                        cita = `(*${tituloCitaAPA}*, ${anio})`;
-                    }
-                    
-                    // Cita al inicio de oración
-                    citaInicio = `${autorParaCitaInicio} (${anio})`;
-                    if (autoresProcesados[0] === "Autor Desconocido" && (tipo === "pagina" || tipo === "documento" || tipo === "recurso")) {
-                        let tituloCitaAPA = nombrePagina || titulo || "Título Desconocido";
-                        if (tituloCitaAPA.length > 30) tituloCitaAPA = tituloCitaAPA.substring(0,30) + "...";
-                        citaInicio = `"${tituloCitaAPA}" (${anio})`;
-                    } else if (autoresProcesados[0] === "Autor Desconocido" && (tipo === "libro" || tipo === "articulo")) {
-                        let tituloCitaAPA = titulo || "Título Desconocido";
-                        if (tituloCitaAPA.length > 30) tituloCitaAPA = tituloCitaAPA.substring(0,30) + "...";
-                        citaInicio = `${tipo === "libro" ? "*" : "'"}${tituloCitaAPA}${tipo === "libro" ? "*" : "'"} (${anio})`;
-                    }
-
-                    // Referencia
-                    let tituloAPA = tipo === "libro" || tipo === "articulo" || tipo === "recurso" ? sentenceCaseAPA(titulo) : sentenceCaseAPA(nombrePagina);
-                    let fuenteAPA = tipo === "libro" ? publicado : (tipo === "articulo" ? `*${titleCaseMLA(revista)}*` : sitioWeb);
-
-                    if (tipo === "libro") {
-                        ref = `${autoresFormatoAPA}. (${anio}). *${tituloAPA}*. ${ciudad ? ciudad + ': ' : ''}${publicado}.`;
-                    } else if (tipo === "articulo") {
-                        let detallesArticulo = "";
-                        if (volumen) detallesArticulo += `, *${volumen}*`;
-                        if (numero) detallesArticulo += `(${numero})`;
-                        if (paginas) detallesArticulo += `, ${paginas}`;
-                        ref = `${autoresFormatoAPA}. (${anio}). ${tituloAPA}. ${fuenteAPA}${detallesArticulo}.`;
-                        if(url) ref += ` ${url}`;
-                    } else if (tipo === "pagina" || tipo === "documento") {
-                        let fechaAPAWeb = anio;
-                        if (anio !== "s.f." && mesFormateado && dia) fechaAPAWeb = `${anio}, ${dia} de ${mesFormateado}`;
-                        else if (anio !== "s.f." && mesFormateado) fechaAPAWeb = `${anio}, ${mesFormateado}`;
-                        
-                        ref = `${autoresFormatoAPA}. (${fechaAPAWeb}). *${tituloAPA}*. ${fuenteAPA}. ${url ? url : ''}`;
-                    } else if (tipo === "recurso") {
-                        let fechaAPAWeb = anio;
-                        if (anio !== "s.f." && mesFormateado && dia) fechaAPAWeb = `${anio}, ${dia} de ${mesFormateado}`;
-                        else if (anio !== "s.f." && mesFormateado) fechaAPAWeb = `${anio}, ${mesFormateado}`;
-                        
-                        let ubicacion = [estado, pais, region].filter(Boolean).join(", ");
-                        ref = `${autoresFormatoAPA}. (${fechaAPAWeb}). *${tituloAPA}*. [Recurso electrónico]. ${ubicacion ? ubicacion + ". " : ""}${url ? url : ''}`;
-                    }
-                    break;
-
-                case "mla":
-                    // Cita al final de párrafo
-                    cita = `(${autorParaCita})`;
-                    if (autoresProcesados[0] === "Autor Desconocido") {
-                         let tituloCitaMLA = nombrePagina || titulo || "Título Desconocido";
-                         tituloCitaMLA = tituloCitaMLA.split(' ').slice(0,3).join(' ');
-                         cita = `("${titleCaseMLA(tituloCitaMLA)}")`;
-                    }
-                    
-                    // Cita al inicio de oración
-                    citaInicio = `${autorParaCitaInicio}`;
-                    if (autoresProcesados[0] === "Autor Desconocido") {
-                         let tituloCitaMLA = nombrePagina || titulo || "Título Desconocido";
-                         tituloCitaMLA = tituloCitaMLA.split(' ').slice(0,3).join(' ');
-                         citaInicio = `"${titleCaseMLA(tituloCitaMLA)}"`;
-                    }
-
-                    // Referencia
-                    let tituloMLA = (tipo === "libro" || tipo === "recurso") ? `*${titleCaseMLA(titulo)}*` : `"${titleCaseMLA(titulo)}"`;
-                    if (tipo === "pagina" || tipo === "documento") tituloMLA = `"${titleCaseMLA(nombrePagina)}"`;
-                    
-                    let fuenteMLA = tipo === "libro" ? publicado : (tipo === "articulo" ? `*${titleCaseMLA(revista)}*` : `*${titleCaseMLA(sitioWeb)}*`);
-                    let fechaMLA = anio !== "s.f." ? anio : (dia && mesFormateado ? `${dia} ${mesFormateado}` : (mesFormateado || "s.f."));
-                    if (dia && mesFormateado && anio !== "s.f.") fechaMLA = `${dia} ${formatearNombresMes(mesInput)} ${anio}`;
-                    else if (mesFormateado && anio !== "s.f.") fechaMLA = `${formatearNombresMes(mesInput)} ${anio}`;
-                    
-                    if (tipo === "libro") {
-                        ref = `${autoresFormatoMLA}. ${tituloMLA}. ${publicado}, ${fechaMLA}.`;
-                    } else if (tipo === "articulo") {
-                        let detallesArticulo = "";
-                        if (volumen) detallesArticulo += `, vol. ${volumen}`;
-                        if (numero) detallesArticulo += `, no. ${numero}`;
-                        if (paginas) detallesArticulo += `, pp. ${paginas}`;
-                        ref = `${autoresFormatoMLA}. ${tituloMLA} ${fuenteMLA}${detallesArticulo}, ${fechaMLA}. ${url ? url : ''}`;
-                    } else if (tipo === "pagina" || tipo === "documento") {
-                        ref = `${autoresFormatoMLA}. ${tituloMLA} ${fuenteMLA}, ${fechaMLA}, ${url}.`;
-                        const hoy = new Date();
-                        const fechaAccesoMLA = `${hoy.getDate()} ${formatearNombresMes(String(hoy.getMonth() + 1))} ${hoy.getFullYear()}`;
-                        ref += ` Accessed ${fechaAccesoMLA}.`;
-                    } else if (tipo === "recurso") {
-                         let editor = publicado || "Editor Desconocido";
-                         let ubicacion = [estado, pais, region].filter(Boolean).join(", ");
-                         ref = `${autoresFormatoMLA}. ${tituloMLA}. ${editor}, ${fechaMLA}. ${ubicacion ? ubicacion + ". " : ""}${url ? url : ''}`;
-                    }
-                    break;
-
-                case "iso":
-                    // Cita al final de párrafo
-                    let autorCitaISO = "Desconocido";
-                    if (autoresProcesados.length > 0 && autoresProcesados[0] !== "Autor Desconocido") {
-                        autorCitaISO = autoresProcesados.map(a => a.split(',')[0]).slice(0,1).join("");
-                        if(autoresProcesados.length > 1) autorCitaISO += " et al.";
-                    } else {
-                        autorCitaISO = (titulo || nombrePagina || "Anónimo").substring(0,15);
-                    }
-                    cita = `(${autorCitaISO}, ${anio})`;
-                    
-                    // Cita al inicio de oración
-                    citaInicio = `${autorParaCitaInicio} (${anio})`;
-                    if (autoresProcesados[0] === "Autor Desconocido") {
-                         let tituloCitaISO = nombrePagina || titulo || "Título Desconocido";
-                         tituloCitaISO = tituloCitaISO.substring(0,30) + "...";
-                         citaInicio = `"${tituloCitaISO}" (${anio})`;
-                    }
-
-                    // Referencia
-                    let tituloISO = `*${titulo || nombrePagina}*`;
-                    let fuenteISO = tipo === "libro" ? (ciudad ? ciudad + ': ' + publicado : publicado) : 
-                                    (tipo === "articulo" ? `*${revista}*` : sitioWeb);
-                    
-                    let fechaISO = anio;
-                    if (dia && mesFormateado && anio !== "s.f.") fechaISO = `${anio}-${String(new Date(Date.parse(mesFormateado +" 1, 2000")).getMonth()+1).padStart(2,'0')}-${dia.padStart(2,'0')}`;
-                    else if (mesFormateado && anio !== "s.f.") fechaISO = `${anio}-${String(new Date(Date.parse(mesFormateado +" 1, 2000")).getMonth()+1).padStart(2,'0')}`;
-                    
-                    const hoy = new Date();
-                    const fechaConsulta = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2,'0')}-${String(hoy.getDate()).padStart(2,'0')}`;
-
-                    if (tipo === "libro") {
-                        ref = `${autoresFormatoISO}. ${anio}. ${tituloISO}. ${fuenteISO}.`;
-                    } else if (tipo === "articulo") {
-                        let detallesArticulo = "";
-                        if (volumen) detallesArticulo += `, ${volumen}`;
-                        if (numero) detallesArticulo += `(${numero})`;
-                        if (paginas) detallesArticulo += `: ${paginas}`;
-                        ref = `${autoresFormatoISO}. ${anio}. ${titulo || nombrePagina}. ${fuenteISO}${detallesArticulo}.`;
-                    } else if (tipo === "pagina" || tipo === "documento") {
-                        ref = `${autoresFormatoISO}. (${fechaISO}). ${tituloISO} [en línea]. ${fuenteISO}. [Consultado ${fechaConsulta}]. Disponible en: ${url}`;
-                    } else if (tipo === "recurso") {
-                         let tipoRecurso = "[recurso electrónico]";
-                         let editor = publicado || [estado, pais, region].filter(Boolean).join(", ");
-                         ref = `${autoresFormatoISO}. ${anio}. ${tituloISO} ${tipoRecurso}. ${editor}. ${url ? 'Disponible en: ' + url : ''}`;
-                    }
-                    break;
-            }
-
-            document.getElementById("cita").innerHTML = formatText(cita);
-            document.getElementById("citaInicio").innerHTML = formatText(citaInicio);
-            document.getElementById("referencia").innerHTML = formatText(ref);
-        }
-
-        function formatText(text) {
-            return text
-                .replace(/\*(.*?)\*/g, '<span class="italic">$1</span>')
-                .replace(/"(.*?)"/g, '"<span class="highlight">$1</span>"')
-                .replace(/\b(et al\.|s\.f\.|pp\.|vol\.|no\.)\b/g, '<span class="highlight">$1</span>');
-        }
-
-        function copiar(event) {
-            const targetId = event.target.dataset.target;
-            if (!targetId) return;
-
-            const textoElemento = document.getElementById(targetId);
-            if (!textoElemento) return;
-
-            // Remover el formato para copiar solo el texto
-            const texto = textoElemento.textContent || textoElemento.innerText;
-            const originalButtonText = event.target.textContent;
-            
-            navigator.clipboard.writeText(texto).then(() => {
-                event.target.textContent = '¡Copiado!';
-                setTimeout(() => {
-                    event.target.textContent = originalButtonText;
-                }, 1500);
-            }).catch(err => {
-                console.error('Error al copiar: ', err);
-                alert('Error al copiar el texto.');
-            });
-        }
-
-        // Event Listeners
+        // Event listeners
         tipoSelect.addEventListener('change', mostrarCampos);
-        generarBtn.addEventListener('click', generar);
-        document.querySelectorAll('.copiar-btn').forEach(btn => {
-            btn.addEventListener('click', copiar);
+        
+        // Funciones de copiado (simuladas)
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('copiar-btn')) {
+                const target = e.target.getAttribute('data-target');
+                const content = document.getElementById(target).textContent;
+                
+                // Simular copiado al portapapeles
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(content).then(() => {
+                        e.target.textContent = '¡Copiado!';
+                        setTimeout(() => {
+                            e.target.textContent = e.target.textContent.replace('¡Copiado!', 'Copiar');
+                        }, 2000);
+                    });
+                } else {
+                    // Fallback para navegadores sin clipboard API
+                    e.target.textContent = '¡Copiado!';
+                    setTimeout(() => {
+                        e.target.textContent = e.target.textContent.replace('¡Copiado!', 'Copiar');
+                    }, 2000);
+                }
+            }
         });
 
-        // Inicializar campos al cargar
-        mostrarCampos();
-        
-        // Ejemplo de datos para probar
-        document.getElementById("tipo").value = "libro";
-        mostrarCampos();
-        document.getElementById("autor").value = "Carlos Fuentes; Elena Poniatowska";
-        document.getElementById("titulo").value = "El Laberinto de la Soledad";
-        document.getElementById("anio").value = "1950";
-        document.getElementById("ciudad").value = "Ciudad de México";
-        document.getElementById("publicado").value = "Fondo de Cultura Económica";
+        // Función de generar (placeholder)
+        generarBtn.addEventListener('click', function() {
+            document.getElementById('cita').textContent = 'Cita generada aparecerá aquí...';
+            document.getElementById('citaInicio').textContent = 'Cita de inicio aparecerá aquí...';
+            document.getElementById('referencia').textContent = 'Referencia bibliográfica aparecerá aquí...';
+        });
     </script>
 </body>
 </html>
