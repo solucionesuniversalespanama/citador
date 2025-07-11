@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Citas - Mejorado</title>
+    <meta name="description" content="Herramienta para generar citas y referencias bibliográficas según diferentes normas">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Generador de Citas y Referencias</h1>
+            <p>Herramienta completa para generar citas en texto y referencias bibliográficas según diferentes normas</p>
+        </header>
+        
+        <div class="content">
+            <section class="form-section">
+                <h2 class="section-title">
+                    <span aria-hidden="true">📝</span> Información del Documento
+                </h2>
+                <form id="citasForm" autocomplete="off">
+                    <div class="form-group">
+                        <label for="tipo">Tipo de documento:</label>
+                        <select id="tipo" required>
+                            <option value="">Selecciona tipo</option>
+                            <option value="libro">Libro</option>
+                            <option value="articulo">Artículo de revista</option>
+                            <option value="pagina">Página o sitio web</option>
+                            <option value="documento">Documento del sitio web</option>
+                            <option value="recurso">Recurso electrónico (Otro)</option>
+                        </select>
+                    </div>
+                    
+                    <div id="campos">
+                        <div class="campo autor">
+                            <label for="autor">Autor(es): <span class="info-icon" title="Separa múltiples autores con punto y coma (;)">?</span></label>
+                            <input type="text" id="autor" placeholder="Ej: Maria Rodriguez Perez; Jose Martinez Lopez" autocomplete="off">
+                        </div>
+                        <div class="campo titulo">
+                            <label for="titulo">Título del libro / artículo / recurso:</label>
+                            <input type="text" id="titulo" placeholder="Título completo del documento" autocomplete="off">
+                        </div>
+                        <div class="campo anio">
+                            <label for="anio">Año:</label>
+                            <input type="number" id="anio" placeholder="Ej: 2023" min="0" autocomplete="off">
+                        </div>
+                        <div class="campo ciudad">
+                            <label for="ciudad">Ciudad (para libros):</label>
+                            <input type="text" id="ciudad" placeholder="Ciudad de publicación" autocomplete="off">
+                        </div>
+                        <div class="campo publicado">
+                            <label for="publicado">Editorial / Publicado por:</label>
+                            <input type="text" id="publicado" placeholder="Nombre de la editorial" autocomplete="off">
+                        </div>
+                        <div class="campo revista">
+                            <label for="revista">Nombre de la revista:</label>
+                            <input type="text" id="revista" placeholder="Revista donde se publicó" autocomplete="off">
+                        </div>
+                        <div class="campo volumen">
+                            <label for="volumen">Volumen (para revista):</label>
+                            <input type="text" id="volumen" placeholder="Volumen de la revista" autocomplete="off">
+                        </div>
+                        <div class="campo numero">
+                            <label for="numero">Número/Fascículo (para revista):</label>
+                            <input type="text" id="numero" placeholder="Número de la revista" autocomplete="off">
+                        </div>
+                        <div class="campo paginas">
+                            <label for="paginas">Páginas (para revista, Ej: 12-25):</label>
+                            <input type="text" id="paginas" placeholder="Páginas del artículo" autocomplete="off">
+                        </div>
+                        <div class="campo nombrePagina">
+                            <label for="nombrePagina">Título de la página/documento específico:</label>
+                            <input type="text" id="nombrePagina" placeholder="Título de la página web" autocomplete="off">
+                        </div>
+                        <div class="campo sitioWeb">
+                            <label for="sitioWeb">Nombre del sitio web general:</label>
+                            <input type="text" id="sitioWeb" placeholder="Nombre del sitio web" autocomplete="off">
+                        </div>
+                        <div class="campo mes">
+                            <label for="mes">Mes (nombre o número):</label>
+                            <input type="text" id="mes" placeholder="Ej: mayo o 5" autocomplete="off">
+                        </div>
+                        <div class="campo dia">
+                            <label for="dia">Día:</label>
+                            <input type="number" id="dia" placeholder="Ej: 15" min="1" max="31" autocomplete="off">
+                        </div>
+                        <div class="campo url">
+                            <label for="url">URL:</label>
+                            <input type="url" id="url" placeholder="https://ejemplo.com" autocomplete="off">
+                        </div>
+                        <div class="campo estado">
+                            <label for="estado">Ciudad/Estado (para recurso electrónico):</label>
+                            <input type="text" id="estado" placeholder="Ubicación del recurso" autocomplete="off">
+                        </div>
+                        <div class="campo pais">
+                            <label for="pais">Provincia/País (para recurso electrónico):</label>
+                            <input type="text" id="pais" placeholder="País del recurso" autocomplete="off">
+                        </div>
+                        <div class="campo region">
+                            <label for="region">Región (para recurso electrónico):</label>
+                            <input type="text" id="region" placeholder="Región del recurso" autocomplete="off">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="norma">Norma de citación:</label>
+                        <select id="norma">
+                            <option value="apa">APA 7ª edición</option>
+                            <option value="mla">MLA 9ª edición</option>
+                            <option value="iso">ISO 690</option>
+                        </select>
+                    </div>
+                    <button type="submit" id="generarBtn">Generar Citas y Referencias</button>
+                </form>
+            </section>
+            <section class="result-section">
+                <h2 class="section-title">
+                    <span aria-hidden="true">📋</span> Resultados Generados
+                </h2>
+                <div class="result-card">
+                    <h3><span aria-hidden="true">🔖</span> Cita al Final de Párrafo</h3>
+                    <div class="result-content" id="cita"></div>
+                    <div class="btn-group">
+                        <button type="button" class="copiar-btn" data-target="cita">Copiar Cita Final</button>
+                    </div>
+                </div>
+                <div class="result-card">
+                    <h3><span aria-hidden="true">✏️</span> Cita al Inicio de Oración</h3>
+                    <div class="result-content" id="citaInicio"></div>
+                    <div class="btn-group">
+                        <button type="button" class="copiar-btn" data-target="citaInicio">Copiar Cita Inicio</button>
+                    </div>
+                </div>
+                <div class="result-card">
+                    <h3><span aria-hidden="true">📚</span> Referencia Bibliográfica</h3>
+                    <div class="result-content" id="referencia"></div>
+                    <div class="btn-group">
+                        <button type="button" class="copiar-btn" data-target="referencia">Copiar Referencia</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <footer>
+            <p>Generador de Citas Bibliográficas &copy; 2023 - Herramienta para estudiantes e investigadores</p>
+        </footer>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
