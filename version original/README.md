@@ -1,4 +1,3 @@
-#citador autocontenido
 📚 Citador Manual de Normas APA 7, MLA 9 e ISO 690
 Este es un citador manual diseñado para facilitar la creación de referencias y citas bibliográficas en los estilos APA 7ma Edición, MLA 9na Edición e ISO 690. Es una herramienta pensada para estudiantes e investigadores en Panamá y el mundo que necesitan una forma sencilla y rápida de generar sus citas, especialmente útil para programas y software que no incluyen esta funcionalidad de forma integrada.
 
